@@ -1,0 +1,29 @@
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #00B7FF;
+}
+
+footer {
+    padding: 40px 0px;
+    color: #000;
+    margin-top: 20px;
+}
+
+label.error {
+    color: #da3116;
+}
+
+label.error input{
+    border: solid #da3116 1px;
+}
+
+label.error span{
+    font-size: 0.7rem;
+}
+
+tr.alert{
+    background-color: #fce6e2;
+}

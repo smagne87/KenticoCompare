@@ -1,0 +1,81 @@
+<div ng-controller="compareController" class="row">
+    <div class="medium-6 columns">
+        <label ng-class="{error: sourceError}">Kentico Source
+            <input type="text" placeholder="source service url" ng-model="txtSource">
+            <span ng-show="sourceError">Web service invalid.</span>
+        </label>
+    </div>
+    <div class="medium-6 columns">
+        <label ng-class="{error: sourceError}">Kentico Target
+            <input type="text" placeholder="target service url" ng-model="txtTarget">
+            <span ng-show="targetError">Web service invalid.</span>
+        </label>
+    </div>
+    <div class="columns medium-12">
+        <button class="button" type="button" ng-click="loadKenticoTrees()">Load Instances</button>
+        <button class="button" type="button" ng-show="areSelectedNodes()" ng-click="compareItems()">Compare</button>
+        <button class="button" type="button" ng-click="closeCurrentTab()" ng-show="isClosableTab()">Close Tab</button>
+    </div>
+    <tabset>
+        <tab heading="Compare Tree">
+            <div class="row">
+                <div class="columns medium-6">
+                    <div
+                            data-angular-treeview="true"
+                            data-tree-model="sourceList"
+                            data-tree-Id="sourceTreeView"
+                            data-node-id="DocumentID"
+                            data-node-label="DocumentName"
+                            data-node-children="DocumentChildren">
+                    </div>
+                </div>
+                <div class="columns medium-6">
+                    <div
+                            data-angular-treeview="true"
+                            data-tree-model="targetList"
+                            data-tree-Id="targetTreeView"
+                            data-node-id="DocumentID"
+                            data-node-label="DocumentName"
+                            data-node-children="DocumentChildren">
+                    </div>
+                </div>
+            </div>
+        </tab>
+        <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active">
+            <h3>{{tab.content}}</h3>
+            <label>
+                <input type="checkbox" ng-model="tab.displayKenticoFields"> Display Kentico Documenet Fields
+            </label>
+            <table class="stacked table-scroll text-center">
+                <thead>
+                <tr>
+                    <th colspan="2">Source: {{tab.kenticoSource.DocumentName}}</th>
+                    <th colspan="2">Target: {{tab.kenticoTarget.DocumentName}}</th>
+                </tr>
+                <tr>
+                    <th>Properties</th>
+                    <th>Values</th>
+                    <th>Update Target</th>
+                    <th>Values</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="docprop in tab.kenticoSource.DocumentProperties track by $index">
+                <tr ng-class="{alert: tab.kenticoSource.DocumentPropertiesValues[$index] != tab.kenticoTarget.DocumentPropertiesValues[$index]}"
+                    ng-show="showColumn(docprop)">
+                    <td width="80"><b>{{docprop}}</b></td>
+                    <td>
+                        {{tab.kenticoSource.DocumentPropertiesValues[$index]}}
+                    </td>
+                    <td>
+                        <button ng-show="tab.kenticoSource.DocumentPropertiesValues[$index] != tab.kenticoTarget.DocumentPropertiesValues[$index]" type="button" class="button small"
+                                ng-click="updateTarget(docprop, tab.kenticoSource.DocumentPropertiesValues[$index])">
+                            Update Target
+                        </button>
+                    </td>
+                    <td>{{tab.kenticoTarget.DocumentPropertiesValues[$index]}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </tab>
+    </tabset>
+</div>
